@@ -7,6 +7,7 @@ import rx.Subscriber;
 import java.util.Collections;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class ApplicationTest {
 
@@ -54,5 +55,12 @@ public class ApplicationTest {
                 .forEach(System.out::print);
 
         Observable.concat(hello, world, Observable.just("!!\n")).subscribe(System.out::print);
+    }
+
+    @Test
+    public void asyncSequence() throws InterruptedException {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .subscribe(e -> System.out.println("Received: " + e));
+        Thread.sleep(5000);
     }
 }
