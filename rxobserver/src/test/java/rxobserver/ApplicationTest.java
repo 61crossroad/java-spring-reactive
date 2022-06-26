@@ -3,8 +3,10 @@ package rxobserver;
 import org.junit.jupiter.api.Test;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 
 import java.util.Collections;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -62,5 +64,17 @@ public class ApplicationTest {
         Observable.interval(1, TimeUnit.SECONDS)
                 .subscribe(e -> System.out.println("Received: " + e));
         Thread.sleep(5000);
+    }
+
+    @Test
+    public void withSubscription() throws InterruptedException {
+        CountDownLatch externalSignal = new CountDownLatch(1);
+
+        Subscription subscription = Observable
+                .interval(100, TimeUnit.MILLISECONDS)
+                .subscribe(System.out::println);
+
+        externalSignal.await();
+        subscription.unsubscribe();
     }
 }
