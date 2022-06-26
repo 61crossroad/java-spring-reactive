@@ -77,4 +77,13 @@ public class ApplicationTest {
         externalSignal.await();
         subscription.unsubscribe();
     }
+
+    @Test
+    public void zip() {
+        Observable.zip(
+                Observable.just("A", "B", "C"),
+                Observable.just("1", "2", "3"),
+                (x, y) -> x + y)
+                .forEach(System.out::println);
+    }
 }
